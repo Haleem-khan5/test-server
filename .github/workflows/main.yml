@@ -24,16 +24,16 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install --no-cache-dir -r requirements.txt
 
-      - name: Print debugging information (optional)
+      - name: Print installed packages (debugging)
         run: |
           source venv/bin/activate
-          echo "Python Version: $(python --version)"
-          echo "Installed Packages:"
           pip freeze
 
-      - name: Run Flask app (Test Run)
+      - name: Run Flask app (Background Test)
         run: |
           source venv/bin/activate
-          python app.py
+          python app.py &  # Start Flask in the background
+          sleep 5  # Wait for 5 seconds to ensure it starts correctly
+          pkill -f app.py  # Kill the Flask process to allow the job to complete
